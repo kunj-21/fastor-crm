@@ -1,0 +1,68 @@
+{
+  "info": {
+    "name": "Fastor CRM API",
+    "description": "Register or login first: the token is saved automatically into {{token}} for the protected requests.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:4000" },
+    { "key": "token", "value": "" },
+    { "key": "enquiryId", "value": "1" }
+  ],
+  "item": [
+    {
+      "name": "1. Register employee",
+      "event": [{ "listen": "test", "script": { "exec": ["const b = pm.response.json(); if (b.token) pm.collectionVariables.set('token', b.token);"] } }],
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "url": "{{baseUrl}}/api/auth/register",
+        "body": { "mode": "raw", "raw": "{\n  \"name\": \"Asha Verma\",\n  \"email\": \"asha@fastor.in\",\n  \"password\": \"secret123\"\n}" }
+      }
+    },
+    {
+      "name": "2. Login employee",
+      "event": [{ "listen": "test", "script": { "exec": ["const b = pm.response.json(); if (b.token) pm.collectionVariables.set('token', b.token);"] } }],
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "url": "{{baseUrl}}/api/auth/login",
+        "body": { "mode": "raw", "raw": "{\n  \"email\": \"asha@fastor.in\",\n  \"password\": \"secret123\"\n}" }
+      }
+    },
+    {
+      "name": "3. Submit public enquiry (no auth)",
+      "event": [{ "listen": "test", "script": { "exec": ["const b = pm.response.json(); if (b.enquiry) pm.collectionVariables.set('enquiryId', b.enquiry.id);"] } }],
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "url": "{{baseUrl}}/api/enquiries/public",
+        "body": { "mode": "raw", "raw": "{\n  \"name\": \"Riya Sharma\",\n  \"email\": \"riya@example.com\",\n  \"phone\": \"+91 98765 43210\",\n  \"courseInterest\": \"Full Stack Development\",\n  \"message\": \"Please call after 6 pm\"\n}" }
+      }
+    },
+    {
+      "name": "4. Fetch unclaimed leads",
+      "request": {
+        "method": "GET",
+        "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+        "url": { "raw": "{{baseUrl}}/api/enquiries/unclaimed?limit=20&offset=0", "host": ["{{baseUrl}}"], "path": ["api", "enquiries", "unclaimed"], "query": [{ "key": "limit", "value": "20" }, { "key": "offset", "value": "0" }] }
+      }
+    },
+    {
+      "name": "5. Claim a lead",
+      "request": {
+        "method": "PATCH",
+        "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+        "url": "{{baseUrl}}/api/enquiries/{{enquiryId}}/claim"
+      }
+    },
+    {
+      "name": "6. Fetch my claimed leads",
+      "request": {
+        "method": "GET",
+        "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+        "url": { "raw": "{{baseUrl}}/api/enquiries/mine?limit=20&offset=0", "host": ["{{baseUrl}}"], "path": ["api", "enquiries", "mine"], "query": [{ "key": "limit", "value": "20" }, { "key": "offset", "value": "0" }] }
+      }
+    }
+  ]
+}
