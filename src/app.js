@@ -24,6 +24,28 @@ export function createApp({ db, jwtSecret, jwtExpiresIn = "1d", corsOrigin = "*"
       ? rateLimit({ windowMs: 15 * 60 * 1000, limit: max, standardHeaders: "draft-7", legacyHeaders: false })
       : (_req, _res, next) => next();
 
+  app.get("/", (_req, res) => {
+    res.json({
+      name: "Fastor CRM API",
+      status: "online",
+      version: "1.0.0",
+      endpoints: {
+        health: "GET /health",
+        auth: {
+          register: "POST /api/auth/register",
+          login: "POST /api/auth/login",
+          me: "GET /api/auth/me",
+        },
+        enquiries: {
+          publicForm: "POST /api/enquiries/public",
+          unclaimed: "GET /api/enquiries/unclaimed",
+          myLeads: "GET /api/enquiries/mine",
+          claimLead: "PATCH /api/enquiries/:id/claim",
+        },
+      },
+    });
+  });
+
   app.get("/health", async (_req, res) => {
     await db.query("SELECT 1");
     res.json({ status: "ok" });
