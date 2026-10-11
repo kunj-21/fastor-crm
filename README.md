@@ -1,8 +1,23 @@
 # Fastor CRM API
 
-REST API for a counselor CRM: employees log in, prospective students submit a public enquiry form, and counselors **claim** enquiries so they become private to them.
+[![Live Deployment](https://img.shields.io/badge/Render-Live_API-46E3B7?style=flat&logo=render&logoColor=white)](https://fastor-crm-api.onrender.com)
+[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-16-336791?style=flat&logo=postgresql&logoColor=white)](https://fastor-crm-api.onrender.com)
+[![Node.js](https://img.shields.io/badge/Node.js-20+-339933?style=flat&logo=nodedotjs&logoColor=white)](https://nodejs.org)
 
-**Stack:** Node.js 20+ · Express 5 · PostgreSQL · JWT (HS256) · bcrypt · Zod validation · Helmet · rate limiting
+🌐 **Live Production API:** [https://fastor-crm-api.onrender.com](https://fastor-crm-api.onrender.com)  
+🏥 **Health Check:** [https://fastor-crm-api.onrender.com/health](https://fastor-crm-api.onrender.com/health)
+
+---
+
+## About
+
+Fastor CRM API is a RESTful backend service built for counselor CRM management:
+- **Employee Authentication:** Secure employee registration and login using JWT (HS256) and salted bcrypt hashing.
+- **Public Lead Ingestion:** Public endpoint for prospective students to submit course enquiries with rate limiting and robust Zod validation.
+- **Atomic Lead Claiming:** Allows counselors to claim open leads with concurrency race-condition handling (`FOR UPDATE SKIP LOCKED`) so a lead is never claimed twice.
+- **Database Migrations:** Automated schema initialization on startup with PostgreSQL.
+
+**Tech Stack:** Node.js 20+ · Express 5 · PostgreSQL 16 · JWT · bcrypt · Zod · Helmet · express-rate-limit
 
 ## Run it
 
