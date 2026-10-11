@@ -1,0 +1,27 @@
+services:
+  - type: web
+    name: fastor-crm-api
+    runtime: node
+    plan: free
+    buildCommand: npm install
+    startCommand: npm start
+    healthCheckPath: /health
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: fastor-crm-db
+          property: connectionString
+      - key: JWT_SECRET
+        generateValue: true
+      - key: JWT_EXPIRES_IN
+        value: 1d
+      - key: CORS_ORIGIN
+        value: "*"
+      - key: NODE_ENV
+        value: production
+
+databases:
+  - name: fastor-crm-db
+    plan: free
+    databaseName: crm
+    user: crm
